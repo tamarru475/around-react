@@ -1,137 +1,99 @@
-import PopupWithForm from "./PopupWithForm";
+import React from "react";
+import { api } from "../utils/api";
 
-export default function Main({}) {
+let userId;
+
+export default function Main(props) {
+  const [userName, setUserName] = React.useState();
+  const [userDescription, setUserDescription] = React.useState();
+  const [userAvatar, setUserAvatar] = React.useState();
+  const [cards, setCards] = React.useState([]);
+
+  React.useEffect(() => {
+    api
+      .getUserInfo()
+      .then((userData) => {
+        userId = userData._id;
+
+        setUserName(userData.name);
+        setUserDescription(userData.about);
+        setUserAvatar(userData.avatar);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    api
+      .getInitialCards()
+      .then((cardsData) => {
+        setCards(cardsData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
   return (
     <main className="main">
       <section className="profile">
         <div className="profile__container">
           <div className="profile__image-container">
             <img
-              src="#"
+              src={userAvatar}
               alt="profile picture"
               className="profile__image"
-              onClick={""}
+              onClick={props.onEditAvatarClick}
             />
             <div className="profile__image-overlay"></div>
           </div>
           <div className="profile__info">
             <h1 className="profile__name" id="profile-name">
-              Cousteau
+              {userName}
             </h1>
             <button
               type="button"
               className="profile__edit-button profile-button"
-              onClick={""}
+              onClick={props.onEditProfileClick}
             ></button>
             <p className="profile__name-discription" id="profile-job">
-              Explorer
+              {userDescription}
             </p>
           </div>
         </div>
         <button
           type="button"
           className="profile__add-button profile-button"
-          onClick={""}
+          onClick={props.onAddPlaceClick}
         ></button>
       </section>
-      <PopupWithForm
-        name="avatar"
-        title="Change profile picture"
-        isOpen={false}
-      >
-        <fieldset className="form__fieldset">
-          <span className="form__input-error title-input-error"></span>
-          <input
-            className="form__input"
-            type="url"
-            id="avatar-input"
-            placeholder="Image link"
-            name="avatar"
-            required
-          />
-          <span className="form__input-error avatar-input-error"></span>
-        </fieldset>
-        <fieldset className="form__fieldset-button">
-          <button
-            type="submit"
-            className="form__button form__button-save"
-            disabled
-          >
-            Save
-          </button>
-        </fieldset>
-      </PopupWithForm>
-      <PopupWithForm name="edit" title="Edit profile" isOpen={false}>
-        <fieldset className="form__fieldset">
-          <input
-            className="form__input form__input-name"
-            type="text"
-            id="name-input"
-            placeholder="Name"
-            name="name"
-            minlength="2"
-            maxlength="40"
-            required
-          />
-          <span className="form__input-error name-input-error"></span>
-          <input
-            className="form__input form__input-job"
-            type="text"
-            id="job-input"
-            placeholder="About"
-            name="job"
-            minlength="2"
-            maxlength="200"
-            required
-          />
-          <span className="form__input-error job-input-error"></span>
-        </fieldset>
-        <fieldset className="form__fieldset-button">
-          <button type="submit" className="form__button form__button-save">
-            Save
-          </button>
-        </fieldset>
-      </PopupWithForm>
-      <PopupWithForm name="add" title="New place" isOpen={false}>
-        <fieldset className="form__fieldset">
-          <input
-            className="form__input"
-            type="text"
-            id="title-input"
-            placeholder="Title"
-            name="title"
-            required
-            minlength="1"
-            maxlength="30"
-          />
-          <span className="form__input-error title-input-error"></span>
-          <input
-            className="form__input"
-            type="url"
-            id="imagelink-input"
-            placeholder="Image link"
-            name="image"
-            required
-          />
-          <span className="form__input-error imagelink-input-error"></span>
-        </fieldset>
-        <fieldset className="form__fieldset-button">
-          <button
-            type="submit"
-            className="form__button form__button-create"
-            disabled
-          >
-            Create
-          </button>
-        </fieldset>
-      </PopupWithForm>
-      <PopupWithForm name="delete" title="Are you sure?" isOpen={false}>
-        <button type="submit" className="delete__form-button button">
-          Yes
-        </button>
-      </PopupWithForm>
+      {props.children}
       <section className="gallery">
-        <ul className="gallery__container" id="gallery-container"></ul>
+        <ul className="gallery__container" id="gallery-container">
+          {cards.map((card) => (
+            <li className="gallery__card" key={card._id}>
+              <div
+                className="gallery__card-image"
+                style={{ backgroundImage: `url(${card.link})` }}
+              ></div>
+              <button
+                type="button"
+                className="gallery__card-trash-button gallery__card-trash-button_active"
+              ></button>
+              <div className="gallery__card-footer">
+                <h2 className="gallery__card-place">{card.name}</h2>
+                <div className="gallery__card-like">
+                  <button
+                    type="button"
+                    className="gallery__card-like_button"
+                  ></button>
+                  <div className="gallery__card-like_counter">
+                    {card.likes.length}
+                  </div>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
       </section>
     </main>
   );
