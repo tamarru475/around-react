@@ -17,6 +17,15 @@ export default function PopupWithForm(props) {
           <h2 className={`${props.name}__header`}>{props.title}</h2>
           <form className={`${props.name}__form form`} name={`${props.name}`}>
             {props.children}
+            <fieldset className="form__fieldset-button">
+              <button
+                type="submit"
+                className="form__button form__button-save"
+                disabled
+              >
+                {props.buttonText}
+              </button>
+            </fieldset>
           </form>
         </div>
       </div>

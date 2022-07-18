@@ -1,21 +1,17 @@
 import React from "react";
 import { api } from "../utils/api";
-import Card from "./card";
-
-let userId;
+import Card from "./Card";
 
 export default function Main(props) {
-  const [userName, setUserName] = React.useState();
-  const [userDescription, setUserDescription] = React.useState();
-  const [userAvatar, setUserAvatar] = React.useState();
+  const [userName, setUserName] = React.useState("");
+  const [userDescription, setUserDescription] = React.useState("");
+  const [userAvatar, setUserAvatar] = React.useState("");
   const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
     api
       .getUserInfo()
       .then((userData) => {
-        userId = userData._id;
-
         setUserName(userData.name);
         setUserDescription(userData.about);
         setUserAvatar(userData.avatar);
@@ -32,7 +28,7 @@ export default function Main(props) {
       .catch((err) => {
         console.log(err);
       });
-  }, [setCards, setUserAvatar, setUserName, setUserDescription]);
+  }, []);
 
   return (
     <main className="main">

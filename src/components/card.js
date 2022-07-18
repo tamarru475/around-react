@@ -10,31 +10,26 @@ export default function Card(props) {
   }
 
   return (
-    <>
-      <li className="gallery__card">
-        <div
-          className="gallery__card-image"
-          style={{ backgroundImage: `url(${props.card.link})` }}
-          onClick={handleImageClick}
-        ></div>
-        <button
-          type="button"
-          className="gallery__card-trash-button gallery__card-trash-button_active"
-          onClick={handleTrashClick}
-        ></button>
-        <div className="gallery__card-footer">
-          <h2 className="gallery__card-place">{props.card.name}</h2>
-          <div className="gallery__card-like">
-            <button
-              type="button"
-              className="gallery__card-like_button"
-            ></button>
-            <div className="gallery__card-like_counter">
-              {props.card.likes.length}
-            </div>
+    <li className="gallery__card">
+      <div
+        className="gallery__card-image"
+        style={{ backgroundImage: `url(${props.card.link})` }}
+        onClick={handleImageClick}
+      ></div>
+      <button
+        type="button"
+        className="gallery__card-trash-button gallery__card-trash-button_active"
+        onClick={handleTrashClick}
+      ></button>
+      <div className="gallery__card-footer">
+        <h2 className="gallery__card-place">{props.card.name}</h2>
+        <div className="gallery__card-like">
+          <button type="button" className="gallery__card-like_button"></button>
+          <div className="gallery__card-like_counter">
+            {props.card.likes.length}
           </div>
         </div>
-      </li>
-    </>
+      </div>
+    </li>
   );
 }

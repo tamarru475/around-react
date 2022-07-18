@@ -1,34 +1,35 @@
 import React from "react";
-import Header from "./header";
-import Main from "./main";
-import Footer from "./footer";
+import Header from "./Header";
+import Main from "./Main";
+import Footer from "./Footer";
 import PopupWithForm from "./PopupWithForm";
-import ImagePopup from "./imagePopup";
+import ImagePopup from "./ImagePopup";
 
 function App() {
-  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
-  const [isEditProfilePopupOpen, setEditProfilePopupOpen] =
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] =
     React.useState(false);
-  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
-  const [isDeletePopupOpen, setDeletePopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
+    React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isDeletePopupOpen, setIsDeletePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({
     visibility: false,
   });
 
   function handleEditAvatarClick() {
-    setEditAvatarPopupOpen(true);
+    setIsEditAvatarPopupOpen(true);
   }
 
   function handleEditProfileClick() {
-    setEditProfilePopupOpen(true);
+    setIsEditProfilePopupOpen(true);
   }
 
   function handleAddPlaceClick() {
-    setAddPlacePopupOpen(true);
+    setIsAddPlacePopupOpen(true);
   }
 
   function handleDeletePopupClick() {
-    setDeletePopupOpen(true);
+    setIsDeletePopupOpen(true);
   }
 
   function handleCardClick(cardData) {
@@ -41,11 +42,11 @@ function App() {
   }
 
   function closeAllPopups() {
-    setEditAvatarPopupOpen(false);
-    setEditProfilePopupOpen(false);
-    setAddPlacePopupOpen(false);
-    setDeletePopupOpen(false);
-    setSelectedCard(false);
+    setIsEditAvatarPopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsAddPlacePopupOpen(false);
+    setIsDeletePopupOpen(false);
+    setSelectedCard({ visibility: false });
   }
 
   return (
@@ -64,6 +65,7 @@ function App() {
             title="Change profile picture"
             isOpen={isEditAvatarPopupOpen}
             onClose={closeAllPopups}
+            buttonText="Save"
           >
             <fieldset className="form__fieldset">
               <span className="form__input-error title-input-error"></span>
@@ -77,21 +79,13 @@ function App() {
               />
               <span className="form__input-error avatar-input-error"></span>
             </fieldset>
-            <fieldset className="form__fieldset-button">
-              <button
-                type="submit"
-                className="form__button form__button-save"
-                disabled
-              >
-                Save
-              </button>
-            </fieldset>
           </PopupWithForm>
           <PopupWithForm
             name="edit"
             title="Edit profile"
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
+            buttonText="Save"
           >
             <fieldset className="form__fieldset">
               <input
@@ -113,17 +107,13 @@ function App() {
               />
               <span className="form__input-error job-input-error"></span>
             </fieldset>
-            <fieldset className="form__fieldset-button">
-              <button type="submit" className="form__button form__button-save">
-                Save
-              </button>
-            </fieldset>
           </PopupWithForm>
           <PopupWithForm
             name="add"
             title="New place"
             isOpen={isAddPlacePopupOpen}
             onClose={closeAllPopups}
+            buttonText="Create"
           >
             <fieldset className="form__fieldset">
               <input
@@ -145,26 +135,14 @@ function App() {
               />
               <span className="form__input-error imagelink-input-error"></span>
             </fieldset>
-            <fieldset className="form__fieldset-button">
-              <button
-                type="submit"
-                className="form__button form__button-create"
-                disabled
-              >
-                Create
-              </button>
-            </fieldset>
           </PopupWithForm>
           <PopupWithForm
             name="delete"
             title="Are you sure?"
             isOpen={isDeletePopupOpen}
             onClose={closeAllPopups}
-          >
-            <button type="submit" className="delete__form-button button">
-              Yes
-            </button>
-          </PopupWithForm>
+            buttonText="Yes"
+          ></PopupWithForm>
           <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         </Main>
         <Footer />
