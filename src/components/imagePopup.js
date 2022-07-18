@@ -1,3 +1,4 @@
+import React from "react";
 export default function ImagePopup(props) {
   const fadeIn = `${props.card.visibility ? "popup_fadein" : ""}`;
   return (
