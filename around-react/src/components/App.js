@@ -3,6 +3,7 @@ import Header from "./header";
 import Main from "./main";
 import Footer from "./footer";
 import PopupWithForm from "./PopupWithForm";
+import ImagePopup from "./imagePopup";
 
 function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = React.useState(false);
@@ -10,6 +11,9 @@ function App() {
     React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = React.useState(false);
   const [isDeletePopupOpen, setDeletePopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState({
+    visibility: false,
+  });
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpen(true);
@@ -23,10 +27,17 @@ function App() {
     setAddPlacePopupOpen(true);
   }
 
-  function onCardClick() {}
-
   function handleDeletePopupClick() {
     setDeletePopupOpen(true);
+  }
+
+  function handleCardClick(cardData) {
+    setSelectedCard({
+      ...selectedCard,
+      visibility: true,
+      name: cardData.name,
+      link: cardData.link,
+    });
   }
 
   function closeAllPopups() {
@@ -34,6 +45,7 @@ function App() {
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
     setDeletePopupOpen(false);
+    setSelectedCard(false);
   }
 
   return (
@@ -44,6 +56,8 @@ function App() {
           onEditAvatarClick={handleEditAvatarClick}
           onEditProfileClick={handleEditProfileClick}
           onAddPlaceClick={handleAddPlaceClick}
+          onCardClick={handleCardClick}
+          onTrashClick={handleDeletePopupClick}
         >
           <PopupWithForm
             name="avatar"
@@ -86,8 +100,6 @@ function App() {
                 id="name-input"
                 placeholder="Name"
                 name="name"
-                minlength="2"
-                maxlength="40"
                 required
               />
               <span className="form__input-error name-input-error"></span>
@@ -97,8 +109,6 @@ function App() {
                 id="job-input"
                 placeholder="About"
                 name="job"
-                minlength="2"
-                maxlength="200"
                 required
               />
               <span className="form__input-error job-input-error"></span>
@@ -123,8 +133,6 @@ function App() {
                 placeholder="Title"
                 name="title"
                 required
-                minlength="1"
-                maxlength="30"
               />
               <span className="form__input-error title-input-error"></span>
               <input
@@ -157,6 +165,7 @@ function App() {
               Yes
             </button>
           </PopupWithForm>
+          <ImagePopup card={selectedCard} onClose={closeAllPopups} />
         </Main>
         <Footer />
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { api } from "../utils/api";
+import Card from "./card";
 
 let userId;
 
@@ -31,7 +32,7 @@ export default function Main(props) {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, [setCards, setUserAvatar, setUserName, setUserDescription]);
 
   return (
     <main className="main">
@@ -70,28 +71,12 @@ export default function Main(props) {
       <section className="gallery">
         <ul className="gallery__container" id="gallery-container">
           {cards.map((card) => (
-            <li className="gallery__card" key={card._id}>
-              <div
-                className="gallery__card-image"
-                style={{ backgroundImage: `url(${card.link})` }}
-              ></div>
-              <button
-                type="button"
-                className="gallery__card-trash-button gallery__card-trash-button_active"
-              ></button>
-              <div className="gallery__card-footer">
-                <h2 className="gallery__card-place">{card.name}</h2>
-                <div className="gallery__card-like">
-                  <button
-                    type="button"
-                    className="gallery__card-like_button"
-                  ></button>
-                  <div className="gallery__card-like_counter">
-                    {card.likes.length}
-                  </div>
-                </div>
-              </div>
-            </li>
+            <Card
+              key={card._id}
+              card={card}
+              onCardClick={props.onCardClick}
+              onTrashClick={props.onTrashClick}
+            />
           ))}
         </ul>
       </section>

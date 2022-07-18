@@ -14,11 +14,7 @@ export default function PopupWithForm(props) {
         ></button>
         <div className={`${props.name}__form-container`}>
           <h2 className={`${props.name}__header`}>{props.title}</h2>
-          <form
-            className={`${props.name}__form form`}
-            name={`${props.name}`}
-            nolvalidate
-          >
+          <form className={`${props.name}__form form`} name={`${props.name}`}>
             {props.children}
           </form>
         </div>

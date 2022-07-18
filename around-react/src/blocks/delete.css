@@ -46,7 +46,7 @@
   transition: transform 0.3s ease-in-out;
 }
 
-.delete__content-container {
+.delete__form-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
