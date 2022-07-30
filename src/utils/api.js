@@ -23,8 +23,49 @@ class Api extends React.Component {
     });
   }
 
+  setUserInfo(inputValues) {
+    return customFetch(`${this._baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        name: inputValues.name,
+        about: inputValues.about,
+      }),
+    });
+  }
+
+  setUserAavatar(inputValues) {
+    return customFetch(`${this._baseUrl}/users/me/avatar`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: inputValues.avatar,
+      }),
+    });
+  }
+
   getInitialCards() {
     return customFetch(`${this._baseUrl}/cards`, {
+      headers: this._headers,
+    });
+  }
+
+  changeLikeCardStatus(cardId, liked) {
+    if (!liked) {
+      return customFetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+        method: "DELETE",
+        headers: this._headers,
+      });
+    } else {
+      return customFetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+        method: "PUT",
+        headers: this._headers,
+      });
+    }
+  }
+  deleteCard(cardId) {
+    return customFetch(`${this._baseUrl}/cards/${cardId}`, {
+      method: "DELETE",
       headers: this._headers,
     });
   }
