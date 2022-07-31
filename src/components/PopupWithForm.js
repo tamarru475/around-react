@@ -22,7 +22,11 @@ export default function PopupWithForm(props) {
           >
             {props.children}
             <fieldset className="form__fieldset-button">
-              <button type="submit" className="form__button form__button-save">
+              <button
+                type="submit"
+                className={`form__button ${props.disabledButtonClass}`}
+                disabled={props.disableButton}
+              >
                 {props.buttonText}
               </button>
             </fieldset>

@@ -24,6 +24,7 @@ Here users can share pictures from their expiriances and like pictures of thier 
 
 **Hope to improve:**
 
+- Form validation
 - more details to profile and images
 - great animation
 - Functionaly to all buttons

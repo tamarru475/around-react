@@ -46,7 +46,7 @@ export default function Main(props) {
               key={card._id}
               card={card}
               onCardClick={props.onCardClick}
-              onCardDelete={props.onCardDelete}
+              onTrashClick={props.onTrashClick}
               onLikeClick={props.onLikeClick}
             />
           ))}

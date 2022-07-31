@@ -5,8 +5,13 @@ import Footer from "./Footer";
 import EditAvatarPopup from "./EditAvatarPopup";
 import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
+import DeleteCardPopup from "./DeleteCardPopup";
 import ImagePopup from "./ImagePopup";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import {
+  ValidationContext,
+  errorMessages,
+} from "../contexts/ValidationContext";
 import { api } from "../utils/api";
 
 function App() {
@@ -16,13 +21,19 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] =
     React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isDeletePopupOpen, setDeletePopupOpen] = React.useState(false);
+
+  /// Card hookes ///
 
   const [cards, setCards] = React.useState([]);
 
   const [selectedCard, setSelectedCard] = React.useState({
     visibility: false,
   });
+
+  /// Context hooks ///
   const [currentUser, setCurrentUser] = React.useState({});
+  const [valid, setValid] = React.useState(true);
 
   /// Initial requests from api ///
 
@@ -64,6 +75,11 @@ function App() {
     setIsAddPlacePopupOpen(true);
   }
 
+  function handleDeletePopupClick(cardData) {
+    setDeletePopupOpen(true);
+    setSelectedCard({ _id: cardData._id });
+  }
+
   function handleCardClick(cardData) {
     setSelectedCard({
       ...selectedCard,
@@ -77,6 +93,7 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
+    setDeletePopupOpen(false);
     setSelectedCard({ visibility: false });
   }
 
@@ -109,6 +126,7 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+    closeAllPopups();
   }
 
   /// After Submit updaters ///
@@ -164,25 +182,38 @@ function App() {
             onEditAvatarClick={handleEditAvatarClick}
             onEditProfileClick={handleEditProfileClick}
             onAddPlaceClick={handleAddPlaceClick}
+            onTrashClick={handleDeletePopupClick}
             onCardClick={handleCardClick}
             cardsArray={cards}
             onCardDelete={handleCardDelete}
             onLikeClick={handleCardLike}
           >
-            <EditAvatarPopup
-              isOpen={isEditAvatarPopupOpen}
+            <ValidationContext.Provider value={errorMessages}>
+              <EditAvatarPopup
+                isOpen={isEditAvatarPopupOpen}
+                onClose={closeAllPopups}
+                onUpdateAvatar={handleUpdateAvatar}
+              />
+              <EditProfilePopup
+                isOpen={isEditProfilePopupOpen}
+                onClose={closeAllPopups}
+                onUpdateUser={handleUpdateUser}
+                isValid={valid}
+                setValid={setValid}
+              />
+              <AddPlacePopup
+                isOpen={isAddPlacePopupOpen}
+                onClose={closeAllPopups}
+                onAddPlaceSubmit={handleAddPlaceSubmit}
+                isValid={valid}
+                setValid={setValid}
+              />
+            </ValidationContext.Provider>
+            <DeleteCardPopup
+              isOpen={isDeletePopupOpen}
               onClose={closeAllPopups}
-              onUpdateAvatar={handleUpdateAvatar}
-            />
-            <EditProfilePopup
-              isOpen={isEditProfilePopupOpen}
-              onClose={closeAllPopups}
-              onUpdateUser={handleUpdateUser}
-            />
-            <AddPlacePopup
-              isOpen={isAddPlacePopupOpen}
-              onClose={closeAllPopups}
-              onAddPlaceSubmit={handleAddPlaceSubmit}
+              onCardDelete={handleCardDelete}
+              card={selectedCard}
             />
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
           </Main>

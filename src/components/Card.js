@@ -19,8 +19,8 @@ export default function Card(props) {
     props.onCardClick(props.card);
   }
 
-  function handleDeleteClick() {
-    props.onCardDelete(props.card);
+  function handleTrashClick() {
+    props.onTrashClick(props.card);
   }
 
   function handleLikeClick() {
@@ -37,7 +37,7 @@ export default function Card(props) {
       <button
         type="button"
         className={cardTrashButtonClassName}
-        onClick={handleDeleteClick}
+        onClick={handleTrashClick}
       ></button>
       <div className="gallery__card-footer">
         <h2 className="gallery__card-place">{props.card.name}</h2>
