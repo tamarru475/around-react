@@ -2,9 +2,9 @@ import React from "react";
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
-import PopupWithForm from "./PopupWithForm";
 import EditAvatarPopup from "./EditAvatarPopup";
 import EditProfilePopup from "./EditProfilePopup";
+import AddPlacePopup from "./AddPlacePopup";
 import ImagePopup from "./ImagePopup";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import { api } from "../utils/api";
@@ -17,12 +17,14 @@ function App() {
     React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
 
+  const [cards, setCards] = React.useState([]);
+
   const [selectedCard, setSelectedCard] = React.useState({
     visibility: false,
   });
   const [currentUser, setCurrentUser] = React.useState({});
 
-  /// Initial request from api ///
+  /// Initial requests from api ///
 
   React.useEffect(() => {
     api
@@ -38,10 +40,14 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
-
-    return () => {
-      console.log("unmounted");
-    };
+    api
+      .getInitialCards()
+      .then((cardsData) => {
+        setCards(cardsData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   /// Popup open/close handlers ///
@@ -74,25 +80,78 @@ function App() {
     setSelectedCard({ visibility: false });
   }
 
+  /// Likes & Delete Card ///
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((user) => user._id === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((currentCard) =>
+            currentCard._id === card._id ? newCard : currentCard
+          )
+        );
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  function handleCardDelete(card) {
+    api
+      .deleteCard(card._id)
+      .then(() => {
+        const newCards = cards.filter((currentCard) => {
+          return currentCard._id !== card._id;
+        });
+        setCards(newCards);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   /// After Submit updaters ///
   function handleUpdateAvatar(inputData) {
-    api.setUserAavatar(inputData).then((updatedInfo) => {
-      setCurrentUser({
-        ...currentUser,
-        avatar: updatedInfo.avatar,
+    api
+      .setUserAavatar(inputData)
+      .then((updatedInfo) => {
+        setCurrentUser({
+          ...currentUser,
+          avatar: updatedInfo.avatar,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
     closeAllPopups();
   }
 
   function handleUpdateUser(inputData) {
-    api.setUserInfo(inputData).then((updatedInfo) => {
-      setCurrentUser({
-        ...currentUser,
-        name: updatedInfo.name,
-        about: updatedInfo.about,
+    api
+      .setUserInfo(inputData)
+      .then((updatedInfo) => {
+        setCurrentUser({
+          ...currentUser,
+          name: updatedInfo.name,
+          about: updatedInfo.about,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
+    closeAllPopups();
+  }
+
+  function handleAddPlaceSubmit(inputData) {
+    api
+      .setNewCard(inputData)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     closeAllPopups();
   }
 
@@ -106,6 +165,9 @@ function App() {
             onEditProfileClick={handleEditProfileClick}
             onAddPlaceClick={handleAddPlaceClick}
             onCardClick={handleCardClick}
+            cardsArray={cards}
+            onCardDelete={handleCardDelete}
+            onLikeClick={handleCardLike}
           >
             <EditAvatarPopup
               isOpen={isEditAvatarPopupOpen}
@@ -117,34 +179,11 @@ function App() {
               onClose={closeAllPopups}
               onUpdateUser={handleUpdateUser}
             />
-            <PopupWithForm
-              name="add"
-              title="New place"
+            <AddPlacePopup
               isOpen={isAddPlacePopupOpen}
               onClose={closeAllPopups}
-              buttonText="Create"
-            >
-              <fieldset className="form__fieldset">
-                <input
-                  className="form__input"
-                  type="text"
-                  id="title-input"
-                  placeholder="Title"
-                  name="title"
-                  required
-                />
-                <span className="form__input-error title-input-error"></span>
-                <input
-                  className="form__input"
-                  type="url"
-                  id="imagelink-input"
-                  placeholder="Image link"
-                  name="image"
-                  required
-                />
-                <span className="form__input-error imagelink-input-error"></span>
-              </fieldset>
-            </PopupWithForm>
+              onAddPlaceSubmit={handleAddPlaceSubmit}
+            />
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
           </Main>
           <Footer />

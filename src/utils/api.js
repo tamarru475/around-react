@@ -50,6 +50,17 @@ class Api extends React.Component {
     });
   }
 
+  setNewCard(inputValues) {
+    return customFetch(`${this._baseUrl}/cards`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        name: inputValues.title,
+        link: inputValues.link,
+      }),
+    });
+  }
+
   changeLikeCardStatus(cardId, liked) {
     if (!liked) {
       return customFetch(`${this._baseUrl}/cards/likes/${cardId}`, {

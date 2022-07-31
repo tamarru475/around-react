@@ -1,53 +1,9 @@
 import React from "react";
 import Card from "./Card";
-import PopupWithForm from "./PopupWithForm";
-import { api } from "../utils/api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
 export default function Main(props) {
-  const [cards, setCards] = React.useState([]);
   const currentUser = React.useContext(CurrentUserContext);
-
-  React.useEffect(() => {
-    api
-      .getInitialCards()
-      .then((cardsData) => {
-        setCards(cardsData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((user) => user._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((state) =>
-          state.map((currentCard) =>
-            currentCard._id === card._id ? newCard : currentCard
-          )
-        );
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-  function handleCardDelete(card) {
-    api
-      .deleteCard(card._id)
-      .then(() => {
-        const newCards = cards.filter((currentCard) => {
-          return currentCard._id !== card._id;
-        });
-        setCards(newCards);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
 
   return (
     <main className="main">
@@ -85,17 +41,15 @@ export default function Main(props) {
       {props.children}
       <section className="gallery">
         <ul className="gallery__container" id="gallery-container">
-          <ul className="gallery__container" id="gallery-container">
-            {cards.map((card) => (
-              <Card
-                key={card._id}
-                card={card}
-                onCardClick={props.onCardClick}
-                onCardDelete={handleCardDelete}
-                onLikeClick={handleCardLike}
-              />
-            ))}
-          </ul>
+          {props.cardsArray.map((card) => (
+            <Card
+              key={card._id}
+              card={card}
+              onCardClick={props.onCardClick}
+              onCardDelete={props.onCardDelete}
+              onLikeClick={props.onLikeClick}
+            />
+          ))}
         </ul>
       </section>
     </main>
