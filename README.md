@@ -21,12 +21,12 @@ Here users can share pictures from their expiriances and like pictures of thier 
 - Responsive Layout
 - Java Script
 - React
+- Form validation
 
 **Hope to improve:**
 
-- Form validation
 - more details to profile and images
 - great animation
-- Functionaly to all buttons
+
   **Github Page:**
   https://tamarru475.github.io/around-react/
