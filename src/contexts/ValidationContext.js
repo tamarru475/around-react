@@ -1,6 +1,5 @@
 import React from "react";
-
-export const ValidationContext = React.createContext();
+const ValidationContext = React.createContext();
 
 export const errorMessages = {
   emptyField: "Please fill out this field.",
@@ -9,8 +8,4 @@ export const errorMessages = {
   notUrl: "Please enter a URL.",
 };
 
-export const errorClasses = {
-  inactiveButtonClass: "form__button_disabled",
-  inputErrorClass: "form__input_type_error",
-  errorClass: "form__input-error_active",
-};
+export default ValidationContext;

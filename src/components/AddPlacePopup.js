@@ -1,6 +1,6 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
-import { ValidationContext } from "../contexts/ValidationContext";
+import ValidationContext from "../contexts/ValidationContext";
 
 export default function AddPlacePopup(props) {
   const [title, setTitle] = React.useState("");

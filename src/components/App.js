@@ -7,12 +7,11 @@ import EditProfilePopup from "./EditProfilePopup";
 import AddPlacePopup from "./AddPlacePopup";
 import DeleteCardPopup from "./DeleteCardPopup";
 import ImagePopup from "./ImagePopup";
-import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import {
-  ValidationContext,
+import CurrentUserContext from "../contexts/CurrentUserContext";
+import ValidationContext, {
   errorMessages,
 } from "../contexts/ValidationContext";
-import { api } from "../utils/api";
+import api from "../utils/api";
 
 function App() {
   /// Popup open/close status ///
