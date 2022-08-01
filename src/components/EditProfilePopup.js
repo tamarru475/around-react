@@ -6,8 +6,8 @@ import ValidationContext from "../contexts/ValidationContext";
 export default function EditProfilePopup(props) {
   const currentUser = React.useContext(CurrentUserContext);
   const errorMessages = React.useContext(ValidationContext);
-  const [name, setName] = React.useState(currentUser.name);
-  const [description, setDescription] = React.useState(currentUser.about);
+  const [name, setName] = React.useState(currentUser.name || "");
+  const [description, setDescription] = React.useState(currentUser.about || "");
   const [nameError, setNameError] = React.useState("");
   const [descriptionError, setDescriptionError] = React.useState("");
   const [disableButton, setDisableButton] = React.useState(true);
@@ -25,7 +25,7 @@ export default function EditProfilePopup(props) {
 
   React.useEffect(() => {
     setName(currentUser.name || "");
-    setDescription(currentUser.about);
+    setDescription(currentUser.about || "");
   }, [currentUser]);
 
   const onNameChange = (e) => {
