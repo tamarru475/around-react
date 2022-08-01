@@ -9,7 +9,9 @@ export default function AddPlacePopup(props) {
   const [titleError, setTitleError] = React.useState("");
   const [linkError, setLinkError] = React.useState("");
 
-  const showErrorMessage = `${props.isValid ? "" : "form__input-error_active"}`;
+  const showErrorMessageClass = `${
+    props.isValid ? "" : "form__input-error_active"
+  }`;
 
   const showErrorInputClass = `${
     props.isValid ? "" : "form__input_type_error"
@@ -85,7 +87,7 @@ export default function AddPlacePopup(props) {
           onChange={onTitleChange}
         />
         <span
-          className={`form__input-error title-input-error ${showErrorMessage}`}
+          className={`form__input-error title-input-error ${showErrorMessageClass}`}
         >
           {titleError}
         </span>
@@ -99,7 +101,7 @@ export default function AddPlacePopup(props) {
           onChange={onLinkChange}
         />
         <span
-          className={`form__input-error imagelink-input-error ${showErrorMessage}`}
+          className={`form__input-error imagelink-input-error ${showErrorMessageClass}`}
         >
           {linkError}
         </span>

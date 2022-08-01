@@ -15,14 +15,16 @@ export default function EditProfilePopup(props) {
     !disableButton ? "" : "form__button_disabled"
   }`;
 
-  const showErrorMessage = `${props.isValid ? "" : "form__input-error_active"}`;
+  const showErrorMessageClass = `${
+    props.isValid ? "" : "form__input-error_active"
+  }`;
 
   const showErrorInputClass = `${
     props.isValid ? "" : "form__input_type_error"
   }`;
 
   React.useEffect(() => {
-    setName(currentUser.name);
+    setName(currentUser.name || "");
     setDescription(currentUser.about);
   }, [currentUser]);
 
@@ -86,11 +88,11 @@ export default function EditProfilePopup(props) {
           id="name-input"
           placeholder="Name"
           name="name"
-          value={name || ""}
+          value={name}
           onChange={onNameChange}
         />
         <span
-          className={`form__input-error name-input-error ${showErrorMessage}`}
+          className={`form__input-error name-input-error ${showErrorMessageClass}`}
         >
           {nameError}
         </span>
@@ -100,11 +102,11 @@ export default function EditProfilePopup(props) {
           id="job-input"
           placeholder="About"
           name="job"
-          value={description || ""}
+          value={description}
           onChange={onDescriptionChange}
         />
         <span
-          className={`form__input-error job-input-error ${showErrorMessage}`}
+          className={`form__input-error job-input-error ${showErrorMessageClass}`}
         >
           {descriptionError}
         </span>
