@@ -17,7 +17,7 @@ export default function EditAvatarPopup(props) {
       name="avatar"
       title="Change profile picture"
       isOpen={props.isOpen}
-      onClose={props.OnClose}
+      onClose={props.onClose}
       buttonText="Save"
       onSubmit={handleSubmit}
     >

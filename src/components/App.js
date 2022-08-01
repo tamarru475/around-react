@@ -30,6 +30,8 @@ function App() {
     visibility: false,
   });
 
+  const [currentCard, setCurrentCard] = React.useState({});
+
   /// Context hooks ///
   const [currentUser, setCurrentUser] = React.useState({});
   const [valid, setValid] = React.useState(true);
@@ -50,6 +52,9 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+  }, []);
+
+  React.useEffect(() => {
     api
       .getInitialCards()
       .then((cardsData) => {
@@ -76,7 +81,7 @@ function App() {
 
   function handleDeletePopupClick(cardData) {
     setDeletePopupOpen(true);
-    setSelectedCard({ _id: cardData._id });
+    setCurrentCard({ _id: cardData._id });
   }
 
   function handleCardClick(cardData) {
@@ -121,11 +126,11 @@ function App() {
           return currentCard._id !== card._id;
         });
         setCards(newCards);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       });
-    closeAllPopups();
   }
 
   /// After Submit updaters ///
@@ -137,11 +142,11 @@ function App() {
           ...currentUser,
           avatar: updatedInfo.avatar,
         });
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       });
-    closeAllPopups();
   }
 
   function handleUpdateUser(inputData) {
@@ -153,11 +158,11 @@ function App() {
           name: updatedInfo.name,
           about: updatedInfo.about,
         });
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       });
-    closeAllPopups();
   }
 
   function handleAddPlaceSubmit(inputData) {
@@ -165,11 +170,11 @@ function App() {
       .setNewCard(inputData)
       .then((newCard) => {
         setCards([newCard, ...cards]);
+        closeAllPopups();
       })
       .catch((err) => {
         console.log(err);
       });
-    closeAllPopups();
   }
 
   return (
@@ -198,21 +203,21 @@ function App() {
                 onClose={closeAllPopups}
                 onUpdateUser={handleUpdateUser}
                 isValid={valid}
-                setValid={setValid}
+                onValidityChange={setValid}
               />
               <AddPlacePopup
                 isOpen={isAddPlacePopupOpen}
                 onClose={closeAllPopups}
                 onAddPlaceSubmit={handleAddPlaceSubmit}
                 isValid={valid}
-                setValid={setValid}
+                onValidityChange={setValid}
               />
             </ValidationContext.Provider>
             <DeleteCardPopup
               isOpen={isDeletePopupOpen}
               onClose={closeAllPopups}
               onCardDelete={handleCardDelete}
-              card={selectedCard}
+              card={currentCard}
             />
             <ImagePopup card={selectedCard} onClose={closeAllPopups} />
           </Main>

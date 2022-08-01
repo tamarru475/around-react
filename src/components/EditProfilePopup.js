@@ -6,8 +6,8 @@ import ValidationContext from "../contexts/ValidationContext";
 export default function EditProfilePopup(props) {
   const currentUser = React.useContext(CurrentUserContext);
   const errorMessages = React.useContext(ValidationContext);
-  const [name, setName] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [name, setName] = React.useState(currentUser.name);
+  const [description, setDescription] = React.useState(currentUser.about);
   const [nameError, setNameError] = React.useState("");
   const [descriptionError, setDescriptionError] = React.useState("");
   const [disableButton, setDisableButton] = React.useState(true);
@@ -17,7 +17,9 @@ export default function EditProfilePopup(props) {
 
   const showErrorMessage = `${props.isValid ? "" : "form__input-error_active"}`;
 
-  const showErrorInput = `${props.isValid ? "" : "form__input_type_error"}`;
+  const showErrorInputClass = `${
+    props.isValid ? "" : "form__input_type_error"
+  }`;
 
   React.useEffect(() => {
     setName(currentUser.name);
@@ -28,15 +30,15 @@ export default function EditProfilePopup(props) {
     setName(e.target.value);
     if (e.target.value.length === 0) {
       setNameError(`${errorMessages.emptyField}`);
-      props.setValid(false);
+      props.onValidityChange(false);
       setDisableButton(true);
     } else if (e.target.value.length < 2) {
       setNameError(`${errorMessages.toShort}`);
-      props.setValid(false);
+      props.onValidityChange(false);
       setDisableButton(true);
     } else {
       setNameError("");
-      props.setValid(true);
+      props.onValidityChange(true);
       setDisableButton(false);
     }
   };
@@ -45,15 +47,15 @@ export default function EditProfilePopup(props) {
     setDescription(e.target.value);
     if (e.target.value.length === 0) {
       setDescriptionError(`${errorMessages.emptyField}`);
-      props.setValid(false);
+      props.onValidityChange(false);
       setDisableButton(true);
     } else if (e.target.value.length < 2) {
       setDescriptionError(`${errorMessages.toShort}`);
-      props.setValid(false);
+      props.onValidityChange(false);
       setDisableButton(true);
     } else {
       setDescriptionError("");
-      props.setValid(true);
+      props.onValidityChange(true);
       setDisableButton(false);
     }
   };
@@ -79,12 +81,12 @@ export default function EditProfilePopup(props) {
     >
       <fieldset className="form__fieldset">
         <input
-          className={`form__input form__input-name ${showErrorInput}`}
+          className={`form__input form__input-name ${showErrorInputClass}`}
           type="text"
           id="name-input"
           placeholder="Name"
           name="name"
-          defaultValue={name}
+          value={name || ""}
           onChange={onNameChange}
         />
         <span
@@ -93,12 +95,12 @@ export default function EditProfilePopup(props) {
           {nameError}
         </span>
         <input
-          className={`form__input form__input-job ${showErrorInput}`}
+          className={`form__input form__input-job ${showErrorInputClass}`}
           type="text"
           id="job-input"
           placeholder="About"
           name="job"
-          defaultValue={description}
+          value={description || ""}
           onChange={onDescriptionChange}
         />
         <span

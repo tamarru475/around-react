@@ -46,7 +46,7 @@ export default function Card(props) {
             type="button"
             className={cardLikeButtonClassName}
             onClick={handleLikeClick}
-          ></button>
+          />
           <div className="gallery__card-like_counter">
             {props.card.likes.length}
           </div>

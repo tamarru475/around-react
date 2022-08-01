@@ -11,25 +11,32 @@ export default function AddPlacePopup(props) {
 
   const showErrorMessage = `${props.isValid ? "" : "form__input-error_active"}`;
 
-  const showErrorInput = `${props.isValid ? "" : "form__input_type_error"}`;
+  const showErrorInputClass = `${
+    props.isValid ? "" : "form__input_type_error"
+  }`;
   const [disableButton, setDisableButton] = React.useState(true);
   const disabledButtonClass = `${
     !disableButton ? "" : "form__button_disabled"
   }`;
 
+  React.useEffect(() => {
+    setTitle("");
+    setlink("");
+  }, [props.isOpen]);
+
   const onTitleChange = (e) => {
     setTitle(e.target.value);
     if (e.target.value.length === 0) {
       setTitleError(`${errorMessages.emptyField}`);
-      props.setValid(false);
+      props.onValidityChange(false);
       setDisableButton(true);
     } else if (e.target.value.length < 2) {
       setTitleError(`${errorMessages.toShort}`);
-      props.setValid(false);
+      props.onValidityChange(false);
       setDisableButton(true);
     } else {
       setTitleError("");
-      props.setValid(true);
+      props.onValidityChange(true);
       setDisableButton(false);
     }
   };
@@ -38,13 +45,14 @@ export default function AddPlacePopup(props) {
     setlink(e.target.value);
     const regExQ =
       /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gi;
+
     if (!e.target.value.match(regExQ)) {
       setLinkError(`${errorMessages.notUrl}`);
-      props.setValid(false);
+      props.onValidityChange(false);
       setDisableButton(true);
     } else {
       setTitleError("");
-      props.setValid(true);
+      props.onValidityChange(true);
       setDisableButton(false);
     }
   };
@@ -53,8 +61,6 @@ export default function AddPlacePopup(props) {
     e.preventDefault();
 
     props.onAddPlaceSubmit({ title: title, link: link });
-    setTitle("");
-    setlink("");
   }
 
   return (
@@ -70,7 +76,7 @@ export default function AddPlacePopup(props) {
     >
       <fieldset className="form__fieldset">
         <input
-          className={`form__input ${showErrorInput}`}
+          className={`form__input ${showErrorInputClass}`}
           type="text"
           id="title-input"
           placeholder="Title"
@@ -84,7 +90,7 @@ export default function AddPlacePopup(props) {
           {titleError}
         </span>
         <input
-          className={`form__input ${showErrorInput}`}
+          className={`form__input ${showErrorInputClass}`}
           type="url"
           id="imagelink-input"
           placeholder="Image link"
